@@ -27,13 +27,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.calinac.CaliNacScreen
 import com.example.calinac.R
+import com.example.calinac.data.AnimalState
 import com.example.calinac.ui.component.AnimalIcon
 import com.example.calinac.ui.theme.CaliNacTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Adopt(){
+fun Adopt(
+    navController: NavController,
+    animalState: AnimalState
+){
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,12 +113,12 @@ fun Adopt(){
             FlowRow(
                 modifier = Modifier.padding(8.dp)
             ) {
-                AnimalIcon(name = "Snoopy", picture = R.drawable.snoopy , bgColor = R.color.secondary)
-                AnimalIcon(name = "Snoopy", picture = R.drawable.snoopy , bgColor = R.color.secondary)
-                AnimalIcon(name = "Snoopy", picture = R.drawable.snoopy , bgColor = R.color.secondary)
-                AnimalIcon(name = "Snoopy", picture = R.drawable.snoopy , bgColor = R.color.secondary)
-                AnimalIcon(name = "Snoopy", picture = R.drawable.snoopy , bgColor = R.color.secondary)
-                AnimalIcon(name = "Snoopy", picture = R.drawable.snoopy , bgColor = R.color.secondary)
+                AnimalIcon(name = animalState.name, picture = R.drawable.snoopy , bgColor = R.color.secondary, onClick = {navController.navigate(CaliNacScreen.Animal.name)})
+                AnimalIcon(name = animalState.name, picture = R.drawable.snoopy , bgColor = R.color.secondary, onClick = {navController.navigate(CaliNacScreen.Animal.name)})
+                AnimalIcon(name = animalState.name, picture = R.drawable.snoopy , bgColor = R.color.secondary, onClick = {navController.navigate(CaliNacScreen.Animal.name)})
+                AnimalIcon(name = animalState.name, picture = R.drawable.snoopy , bgColor = R.color.secondary, onClick = {navController.navigate(CaliNacScreen.Animal.name)})
+                AnimalIcon(name = animalState.name, picture = R.drawable.snoopy , bgColor = R.color.secondary, onClick = {navController.navigate(CaliNacScreen.Animal.name)})
+                AnimalIcon(name = animalState.name, picture = R.drawable.snoopy , bgColor = R.color.secondary, onClick = {navController.navigate(CaliNacScreen.Animal.name)})
             }
 
         }
@@ -150,6 +157,6 @@ fun ExternalButton(
 @Composable
 fun AdoptPreview(){
     CaliNacTheme {
-        Adopt()
+        Adopt(navController = rememberNavController(), AnimalState())
     }
 }

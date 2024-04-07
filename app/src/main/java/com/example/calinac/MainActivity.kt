@@ -52,6 +52,8 @@ import com.example.calinac.ui.theme.CaliNacTheme
 import com.example.calinac.ui.component.Header
 import com.example.calinac.ui.component.Footer
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.calinac.ui.AnimalSheet
+import com.example.calinac.ui.AnimalViewModel
 import com.example.calinac.ui.Conditions
 import com.example.calinac.ui.Events
 import com.example.calinac.ui.HelpUs
@@ -63,6 +65,7 @@ enum class CaliNacScreen() {
     Home,
     Account,
     Adopt,
+    Animal,
     Conditions,
     Help,
     Partnerships,
@@ -84,7 +87,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CaliNacApp(
-    viewModel: AccountViewModel = viewModel(),
+    accountModel: AccountViewModel = viewModel(),
+    animalModel: AnimalViewModel = viewModel(),
     navController: NavHostController = rememberNavController()
 ){
 
@@ -106,6 +110,10 @@ fun CaliNacApp(
         )},
         bottomBar = { Footer() }
     ) { innerPadding ->
+        var selectedItem by remember{
+            mutableStateOf("")
+        }
+
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -118,9 +126,7 @@ fun CaliNacApp(
                     drawerShape = RectangleShape
                 ) {
 
-                    var selectedItem by remember{
-                        mutableStateOf("")
-                    }
+
 
                     Text(
                         text = "Informations",
@@ -265,7 +271,8 @@ fun CaliNacApp(
             },
         ) {
 
-            val uiState by viewModel.uiState.collectAsState()
+            val accountUiState by accountModel.uiState.collectAsState()
+            val animalUiState by animalModel.uiState.collectAsState()
 
             NavHost(
                 navController = navController,
@@ -279,16 +286,38 @@ fun CaliNacApp(
                 }
                 composable(route = CaliNacScreen.Account.name) {
                     Account(
-                        state = uiState,
-                        profilModel = viewModel
+                        state = accountUiState,
+                        animalState = animalUiState,
+                        profilModel = accountModel,
+                        navController = navController
                     )
                 }
                 composable(route = CaliNacScreen.Adopt.name) {
-                    Adopt()
+                    Adopt(
+                        navController,
+                        animalUiState
+                    )
+                }
+
+                composable(route = CaliNacScreen.Animal.name){
+
+                    val previousRoute: String = navController.previousBackStackEntry?.destination?.route.toString()
+                    val canEdit: Boolean = (previousRoute == "Account")
+                    AnimalSheet(
+                        state = animalUiState,
+                        animalModel = animalModel,
+                        canEdit = canEdit,
+                        onBack = { navController.navigateUp() }
+                    )
                 }
 
                 composable(route = CaliNacScreen.Conditions.name){
-                    Conditions()
+                    Conditions(
+                        onBack = {
+                            navController.navigateUp()
+                            selectedItem = ""
+                        }
+                    )
                 }
 
                 composable(route = CaliNacScreen.Help.name){
