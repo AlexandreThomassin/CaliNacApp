@@ -95,10 +95,20 @@ fun CaliNacApp(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    var selectedItem by remember{
+        mutableStateOf("")
+    }
+
     Scaffold(
         topBar = { Header(
-            goToHome = { navController.navigate( CaliNacScreen.Home.name ) },
-            goToAccount = { navController.navigate(CaliNacScreen.Account.name) },
+            goToHome = {
+                navController.navigate( CaliNacScreen.Home.name )
+                selectedItem = ""
+            },
+            goToAccount = {
+                navController.navigate(CaliNacScreen.Account.name)
+                selectedItem = ""
+            },
             openDrawer = {
                 scope.launch {
                     drawerState.apply {
@@ -110,9 +120,7 @@ fun CaliNacApp(
         )},
         bottomBar = { Footer() }
     ) { innerPadding ->
-        var selectedItem by remember{
-            mutableStateOf("")
-        }
+
 
         ModalNavigationDrawer(
             drawerState = drawerState,
