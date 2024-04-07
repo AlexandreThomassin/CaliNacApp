@@ -26,7 +26,8 @@ import com.example.calinac.R
 @Composable
 fun Header(
     goToHome : () -> Unit = {},
-    goToAccount: () -> Unit = {}
+    goToAccount: () -> Unit = {},
+    openDrawer: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -37,13 +38,19 @@ fun Header(
         verticalAlignment = Alignment.CenterVertically
 
     ) {
-        Icon(
-            Icons.Outlined.Menu,
-            contentDescription = "Menu",
+        IconButton(
+            onClick = openDrawer,
             modifier = Modifier
                 .size(60.dp)
                 .padding(10.dp)
-        )
+        ) {
+            Icon(
+                Icons.Outlined.Menu,
+                contentDescription = "Account",
+                modifier = Modifier
+                    .size(50.dp)
+            )
+        }
         Image(
             modifier = Modifier
                 .clickable(
